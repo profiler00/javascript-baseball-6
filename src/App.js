@@ -52,9 +52,9 @@ const calculateScore = (computer, user) => {
 };
 
 // TODO: Mission 6: 스트라이크, 볼 계산 후 문구 출력하는 함수 구현
-const printScore = (strike, ball) => { 
+const printScore = (strike, ball) => {
   let output = '';
-  
+
   if (strike === 0 && ball === 0) {
     printMessage('낫싱');
   } else if (ball > 0) {
@@ -62,11 +62,19 @@ const printScore = (strike, ball) => {
   } else if (strike > 0) {
     output += `${strike}스트라이크`;
   }
-  
-  printMessage(output); 
+
+  printMessage(output);
 };
 
 // TODO: Mission 7: 게임 재시작 또는 종료 처리 함수 구현
+const gameStartOver = async () => {
+  const startOver = Number(
+    await inputMessage(
+      '게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.\n',
+    ),
+  );
+  return startOver !== 1;
+};
 
 // TODO: Mission 8: "3스트라이크"이면, 게임 종료 하는 함수 구현
 
