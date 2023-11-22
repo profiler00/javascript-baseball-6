@@ -1,4 +1,6 @@
 import { MissionUtils } from '@woowacourse/mission-utils';
+import { random, integer, newGame } from './constants/constants';
+import { errorMessage, message } from './constants/messages';
 
 // TODO: Mission 1: 메세지 출력 함수 구현
 function printMessage(message = {}) {
@@ -13,8 +15,11 @@ async function inputMessage(message = {}) {
 // TODO: Mission 3: 상대방(컴퓨터)의 3자리 랜덤 숫자 생성 함수 구현
 function getComputerNumber() {
   const computerNumberList = [];
-  while (computerNumberList.length < 3) {
-    const randomNumber = MissionUtils.Random.pickNumberInRange(1, 9);
+  while (computerNumberList.length < random.LIMIT) {
+    const randomNumber = MissionUtils.Random.pickNumberInRange(
+      random.MIN_RANGE,
+      random.MAX_RANGE,
+    );
     if (!computerNumberList.includes(randomNumber)) {
       computerNumberList.push(randomNumber);
     }
@@ -24,9 +29,9 @@ function getComputerNumber() {
 
 // TODO: Mission 4: 사용자(인터페이스)가 입력한 수를 리스트로 출력하는 함수 구현
 async function getUserNumber() {
-  const userNumber = await inputMessage('숫자를 입력해주세요 : ');
-  if (userNumber.length !== 3) {
-    throw new Error('[ERROR] 3자리 숫자를 입력해주세요.');
+  const userNumber = await inputMessage(message.INPUT_NUMBER);
+  if (userNumber.length !== random.LIMIT) {
+    throw new Error(errorMessage.INVALID_LENGTH);
   }
   const userNumberList = userNumber.split('').map(Number);
   return userNumberList;
@@ -34,8 +39,8 @@ async function getUserNumber() {
 
 // TODO: Mission 5: 스트라이크, 볼 계산 함수 구현
 function calculateScore(computer = {}, user = {}) {
-  let strikeCount = 0;
-  let ballCount = 0;
+  let strikeCount = integer.ZERO;
+  let ballCount = integer.ZERO;
 
   computer.map((computerItems, computerIndex) => {
     user.map((userItems, userIndex) => {
@@ -55,14 +60,14 @@ function calculateScore(computer = {}, user = {}) {
 // TODO: Mission 6: 스트라이크, 볼 계산 후 문구 출력하는 함수 구현
 function printScore(strike = {}, ball = {}) {
   if (!strike && !ball) {
-    printMessage('낫싱');
+    printMessage(message.NOTHING);
   } else {
     let output = '';
     if (ball) {
-      output += `${ball}볼 `;
+      output += `${ball}${message.BALL} `;
     }
     if (strike) {
-      output += `${strike}스트라이크`;
+      output += `${strike}${message.STRIKE}`;
     }
     printMessage(output);
   }
@@ -70,12 +75,8 @@ function printScore(strike = {}, ball = {}) {
 
 // TODO: Mission 7: 게임 재시작 또는 종료 처리 함수 구현
 async function gameStartOver() {
-  const startOver = Number(
-    await inputMessage(
-      '게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.\n',
-    ),
-  );
-  return startOver !== 1;
+  const startOver = Number(await inputMessage(message.GAME_RESTART));
+  return startOver !== newGame.START;
 }
 
 // TODO: Mission 8: "3스트라이크"이면, 게임 종료 하는 함수 구현
@@ -86,8 +87,8 @@ async function isThreeStrike(computerList = {}) {
     const userList = await getUserNumber(computerList);
     const { strikeCount, ballCount } = calculateScore(computerList, userList);
     printScore(strikeCount, ballCount);
-    if (strikeCount === 3) {
-      printMessage('3개의 숫자를 모두 맞히셨습니다! 게임 종료');
+    if (strikeCount === random.LIMIT) {
+      printMessage(message.THREE_STRIKE);
       return gameStartOver();
     }
   }
@@ -98,7 +99,7 @@ async function main() {
   let endPoint = false;
 
   while (!endPoint) {
-    printMessage('숫자 야구 게임을 시작합니다.');
+    printMessage(message.GAME_START);
     const computer = getComputerNumber();
     endPoint = await isThreeStrike(computer);
   }
