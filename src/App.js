@@ -1,6 +1,7 @@
 import { MissionUtils } from '@woowacourse/mission-utils';
 import { random, integer, newGame } from './constants/constants';
-import { errorMessage, message } from './constants/messages';
+import { message } from './constants/messages';
+import Validation from './validations/Validation';
 
 // TODO: Mission 1: 메세지 출력 함수 구현
 function printMessage(message = {}) {
@@ -30,9 +31,7 @@ function getComputerNumber() {
 // TODO: Mission 4: 사용자(인터페이스)가 입력한 수를 리스트로 출력하는 함수 구현
 async function getUserNumber() {
   const userNumber = await inputMessage(message.INPUT_NUMBER);
-  if (userNumber.length !== random.LIMIT) {
-    throw new Error(errorMessage.INVALID_LENGTH);
-  }
+  Validation.isValidLength(userNumber);
   const userNumberList = userNumber.split('').map(Number);
   return userNumberList;
 }
