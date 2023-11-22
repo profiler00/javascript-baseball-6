@@ -1,5 +1,5 @@
-import { random } from "../constants/constants";
-import { errorMessage } from "../constants/messages";
+import { random } from '../constants/constants';
+import { errorMessage } from '../constants/messages';
 
 const Validation = {
   isValidLength(userNumber) {
