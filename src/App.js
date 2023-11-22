@@ -14,7 +14,7 @@ const inputMessage = async message => {
 const getComputerNumber = () => {
   const computerNumberList = [];
   while (computerNumberList.length < 3) {
-    const randomNumber = MissionUtils.Random.puckNumberInRange(1, 9);
+    const randomNumber = MissionUtils.Random.pickNumberInRange(1, 9);
     if (!computerNumberList.includes(randomNumber)) {
       computerNumberList.push(randomNumber);
     }
